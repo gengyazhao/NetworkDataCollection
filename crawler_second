@@ -1,0 +1,66 @@
+#!/usr/bin
+# _*_ coding: UTF-8 _*_
+# Copyright (c) 2021 GengYu.All rights reserved
+# @Create By g84114734
+# @Create_time: 2021/12/6
+# @File Name: crawler_second
+# 打包命令pyinstaller -F package\crawler_second
+"""
+这个模块提供了
+"""
+__author__ = 'gyz'
+from urllib.request import urlopen
+from urllib.error import HTTPError
+from bs4 import BeautifulSoup
+import os
+import pathlib
+cu_dir = os.getcwd()
+result = cu_dir + r'\result.txt'
+
+class crawler_example:
+    def __init__(self):
+        pass
+    def get_html(self,url):
+        try:
+            html = urlopen(url)
+        except HTTPError as e:
+            print(e)
+        else:
+            result = html.read()
+            return result
+    def getTitle(self,result):
+        try:
+            bsObj = BeautifulSoup(result)
+            title = bsObj.title
+        except AttributeError as e:
+            print(e)
+            return None
+        return title
+    def get_txt(self,result):
+        try:
+            bsObj = BeautifulSoup(result)
+            text_list = bsObj.find_all('h4')
+        except AttributeError as e:
+            print(e)
+        else:
+            for t in text_list:
+                print(t.get_text())
+
+
+
+url = r'https://www.huawei.com/en/?ic_medium=direct&ic_source=surlent'
+craw = crawler_example()
+res = craw.get_html(url)
+# title = craw.getTitle(res)
+app_id = craw.get_txt(res)
+# if title == None:
+#     print("Title could not be found")
+# else:
+#     print(title)
+
+
+#findAll(tag,attributes,recursive,text,limit,keywords)
+#find(tag,attributes,recursive,text,keywords)
+属性参数attributes 是用一个Python 字典封装一个标签的若干属性和对应的属性值。
+例如，下面这个函数会返回HTML 文档里红色与绿色两种颜色的span 标签：
+.findAll("span", {"class":{"green", "red"}})
